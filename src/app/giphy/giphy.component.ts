@@ -12,4 +12,7 @@ export class GiphyComponent implements OnInit {
   ngOnInit() {
   }
 
+  searchGiphy(searchTerm){
+    console.log(searchTerm);
+  }
 }
