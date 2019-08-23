@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Giphy } from '../giphy';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GiphyHttpServiceService {
 
+  giphies:Giphy[]=[];
   constructor(private http:HttpClient) { }
 
   searchGiphies(searchTerm: string) {
@@ -17,7 +19,14 @@ export class GiphyHttpServiceService {
     let promise = new Promise((resolve, reject)=>{
       this.http.get(searchEndpoint).toPromise().then(
         (results)=>{
-          console.log(results);
+          this.giphies = [];
+          for (let i=0; i<results["data"].length; i++) {
+            let url = results["data"][i]["images"]["fixed-height"]["url"];
+            let giph = new Giphy(url);
+            this.giphies.push(giph);
+          }
+
+          console.log(this.giphies);
           resolve()
         },
         (error)=>{
